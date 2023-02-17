@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: "jdbc:mariadb://db:3306/homebudget?serverTimezone=Europe/Warsaw&useSSL=false
+    &allowPublicKeyRetrieval=true"
+    username: root
+    password: root

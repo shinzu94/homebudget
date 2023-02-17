@@ -1,0 +1,89 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.0.2'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'jacoco'
+    id 'checkstyle'
+}
+
+group = 'com.shinzu'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.liquibase:liquibase-core'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+    finalizedBy jacocoTestCoverageVerification
+}
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/reports/jacocoHtml")
+    }
+    dependsOn test
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            includes = ['com.crud.*']
+            element = 'BUNDLE'
+            limit {
+                counter = 'CLASS'
+                minimum = 0.8
+                value = 'COVEREDRATIO'
+            }
+            limit {
+                counter = 'METHOD'
+                minimum = 0.8
+                value = 'COVEREDRATIO'
+            }
+            limit {
+                counter = 'LINE'
+                minimum = 0.8
+                value = 'COVEREDRATIO'
+            }
+        }
+    }
+}
+
+checkstyle {
+    repositories {
+        mavenCentral()
+    }
+
+    ignoreFailures = true
+    configFile = file("${project.rootDir}/checkstyle.xml")
+}

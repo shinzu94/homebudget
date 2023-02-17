@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    enabled: true
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    change-log: classpath:/db/changelog/changelog-master.xml
+    driver-class-name: ${spring.datasource.driver-class-name}
+    parameters:
+      datasource-username-param: ${spring.datasource.username}
